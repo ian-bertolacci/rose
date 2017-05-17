@@ -46,7 +46,7 @@ elif test "x$javasetting" = xyes || test "x$javasetting" = xtry; then
       fi
     # AS_SET_CATFILE(JAVA_PATH, "`pwd`", "`dirname ${JAVA}`/../..")
       AS_SET_CATFILE(JAVA_PATH, "`pwd`", "`dirname ${JAVAC}`/..")
-      
+
       # George Vulov (Aug. 25, 2010) On OS X the binaries found under /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/
       # aren't the true Java binaries; instead they check the java preferences app and then instantiate whatever version of Java
       # is specified there. The actual java binaries are located in /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
@@ -55,7 +55,7 @@ elif test "x$javasetting" = xyes || test "x$javasetting" = xtry; then
       		AS_SET_CATFILE(JAVA_PATH, "`pwd`", "`dirname ${JAVAC}`/../../CurrentJDK/Home")
       	fi
 	  fi
-      
+
     # echo "After setting value: JAVA_PATH = ${JAVA_PATH}"
     elif "x$javasetting" = "xyes"; then
       AC_MSG_ERROR([--with-java was given but "java" is not in PATH and JAVA_HOME was not set])
@@ -110,8 +110,8 @@ if test "x$USE_JAVA" = x1; then
 
 echo "JAVA=${JAVA}"
 
-    # Determine java version, e.g. java version "1.7.0_51"
-    JAVA_VERSION=`${JAVA} -version 2>&1 | grep "java version" | sed 's/java version//' | sed 's/"//g'`
+    # Determine java version, e.g. java version "1.7.0_51" or openjdk version "1.8.0_121"
+    JAVA_VERSION=`${JAVA} -version 2>&1 | grep "version" | sed 's/java version//' | sed 's/openjdk version//' | sed 's/"//g'`
     JAVA_VERSION_MAJOR=`echo ${JAVA_VERSION} | awk 'BEGIN {FS="."} {print [$]1}'`
     JAVA_VERSION_MINOR=`echo ${JAVA_VERSION} | awk 'BEGIN {FS="."} {print [$]2}'`
     JAVA_VERSION_PATCH=`echo ${JAVA_VERSION} | awk 'BEGIN {FS="."} {print [$]3}' | awk 'BEGIN {FS="_"} {print [$]1}'`
@@ -228,10 +228,10 @@ echo "In support-java: OS_MACOSX = $OS_MACOSX"
 # echo "In support-java: Exiting as a test!"
 # exit 1
 
-# DQ (11/3/2010): added test for if jni is available by default.  If this passes then 
+# DQ (11/3/2010): added test for if jni is available by default.  If this passes then
 # it is because it is in the compiler's include directly and so it is most likely the
 # wrong jni.h (e.g. from GNU's Java, instead of the Java in $JAVA_PATH.  So if this
-# is the case then we want to use the 
+# is the case then we want to use the
 AC_CHECK_HEADERS([jni.h], [have_jni=yes], [have_jni=no])
 if test "x$have_jni" = "xyes"; then
   AC_MSG_WARN([ROSE has determined that there is a default version of jni.h (likely in the compiler's include directory) this may be the wrong version of jni.h (however, this is not known to be a problem).])
